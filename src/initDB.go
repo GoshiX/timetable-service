@@ -98,7 +98,6 @@ func addRoutes(db *sql.DB) {
 
 			client := &http.Client{}
 			resp, _ := client.Do(req)
-			defer resp.Body.Close()
 
 			body, _ := ioutil.ReadAll(resp.Body)
 
