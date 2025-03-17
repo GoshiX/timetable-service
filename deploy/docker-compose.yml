@@ -1,0 +1,36 @@
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: goshix
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_DB: db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend_network
+
+  backend:
+    container_name: backend
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    environment:
+      DATABASE_URL: "host=postgres port=5432 user=goshix password=123456 dbname=db sslmode=disable"
+      API_KEY: "860f1c2e-7ec5-4cfd-8086-b2960207677b"
+    ports:
+      - "10200:8000"
+    depends_on:
+      - postgres
+    networks:
+      - backend_network
+
+volumes:
+  postgres_data:
+
+networks:
+  backend_network:
+    driver: bridge
